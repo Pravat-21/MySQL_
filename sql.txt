@@ -1,0 +1,6 @@
+--create a database 
+create database bigdata;
+create DATABASE testdb;
+show DATABASES;
+drop DATABASE testdb;
+show DATABASES;
