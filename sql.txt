@@ -1,6 +1,20 @@
---create a database 
-create database bigdata;
-create DATABASE testdb;
-show DATABASES;
-drop DATABASE testdb;
-show DATABASES;
+-- command for creating the database
+create DATABASE bigdatadb;
+--command for using the database 
+use bigdatadb;
+--command for creating the table in the bigdatadb
+create table if not exists employee
+(
+    id INT not null ,
+    name varchar(50) not null ,
+    salary double not null ,
+    hiring_date DATE DEFAULT '2021-01-01',
+    constraint unique_id  UNIQUE(id),
+    constraint salary_check check(salary>500)
+    
+);
+select * from employee;
+insert into employee VALUES(1,'pravat',1000,'2021-12-23');
+insert into employee VALUES(2,'krish',2000,'2021-03-14');
+insert into employee(name,salary,id) values('pravat1',5000,3);
+insert into employee(id,name,salary) values(4,'ram',4000),(5,'rahim',6000),(6,"sumit",4500);
