@@ -1,0 +1,43 @@
+create database bigdatadb;
+use bigdatadb;
+create table if not exists employee
+(
+    id int,
+    name varchar(50),
+    age int,
+    hiring_date DATE,
+    salary DOUBLE,
+    city varchar(40)
+);
+insert into employee VALUES 
+(1,'pravat',22,'2021-11-03',100000,'kolkata'),
+(2,'rohit',23,'2021-11-05',11000,'mumbai'),
+(3,'subham',21,'2021-11-14',11200,'pune'),
+(5,'sikhar',25,'2021-10-14',45000,'banglore'),
+(6,'suriya',27,'2021-11-16',45600,'delhi');
+
+select * from employee;
+--find out how many unique ages in the table 
+select count(distinct(age)) as distinct_age_number from employee;
+
+/* lets say i want to find the columns id ,name and salary as old salary ann a new 
+salary which is 20% incremanted of the old salary */
+
+-- command for above query :
+select id,
+       name,
+       salary as old_salary,
+       salary+(salary*(20/100)) as new_salary
+from employee;       
+
+-- update the salary column after giving the 20% incriment 
+-- first we check the data or the table 
+select * from employee;
+
+update employee set salary=salary+salary*(20/100);
+
+--using where clause for updating 
+update employee set age =30 where age < 30;
+
+-- deleting the rows based on the conditions 
+delete from employee where age>30;
