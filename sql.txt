@@ -34,3 +34,33 @@ alter table employee add constraint unique_dob UNIQUE(DOB);
 insert into employee values(7,'pravatpatra',45000,'2021-08-09'),(8,'ratantata',5600,'2021-08-09');
 --command for  droping the constrint from any column 
 alter table employee drop constraint unique_dob;
+--command for using  primary key 
+-- lets create another table 
+create table if not exists person 
+(
+    per_id int,
+    per_address VARCHAR(100),
+    per_name varchar(50),
+    per_passportno DOUBLE,
+    constraint pk PRIMARY KEY(per_id)    
+);
+
+create table if not exists orders
+( 
+    order_id int,
+    order_date DATE,
+    customer_id int,
+    oder_address VARCHAR(100),
+    constraint pk primary key (order_id),
+    constraint fk foreign key (customer_id) REFERENCES person(per_id)
+
+);
+-- differance between trancate and drop 
+--(If we use the trancate command for any table it just delete the data only ,not the schema of the table but incase of
+-- drop commmand it Deletes all the data as well as the sschema of the table .in other words it deletes the whole table .)
+-- for example 
+select * from employee;
+-- command for trancate the table 
+TRUNCATE table employee;
+--command for the dropping the table 
+drop table employee;
