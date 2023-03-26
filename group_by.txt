@@ -1,0 +1,93 @@
+----------------GROUP-BY----------------------------------
+
+-- creating the database 
+create database bigdatadb;
+use bigdatadb;
+-- creating the table in database 
+create table if not exists employee
+(
+    id int,
+    name varchar(50),
+    age int,
+    hiring_date DATE,
+    salary DOUBLE,
+    city varchar(40)
+);
+insert into employee VALUES 
+(1,'pravat',22,'2021-11-03',100000,'kolkata'),
+(2,'rohit',23,'2021-11-05',11000,'mumbai'),
+(3,'subham',21,'2021-11-14',11200,'pune'),
+(5,'sikhar',25,'2021-10-14',45000,'banglore'),
+(6,'suriya',27,'2021-11-16',45600,'delhi');
+
+insert into employee VALUES (8,'mahi',27,'2021-11-16',45600,'delhi'),
+(7,'virat',24,'2021-08-23',45600,'kolkata'),
+(9,'sulu',27,'2021-11-16',74000,'delhi');
+
+select * from employee;
+-- droping the table 
+drop table employee;
+-- creating the new table for doing the GROUP BY command :
+create table if not exists order_data
+(
+    customer_id int,
+    order_id int,
+    country varchar(50),
+    state VARCHAR(50)
+);
+-- entering the values in it 
+insert into order_data values(1,100,'USA','seattle'),
+(1,101,'USA','wdc'),
+(2,103,'india','bihar'),
+(2,103,'USA','dfc'),
+(3,104,'india','AP'),
+(5,105,'india','kolkata'),
+(4,107,'UK','london'),
+(6,110,'UK','qwsa'),
+(8,120,'india','mumbai'),
+(7,111,'USA','asda'),
+(9,103,'uk','llll');
+
+select * from order_data;
+create table if not exists employee
+(
+    id int,
+    name varchar(50),
+    age int,
+    hiring_date DATE,
+    salary DOUBLE,
+    city varchar(40)
+);
+insert into employee VALUES 
+(1,'pravat',22,'2021-11-03',100000,'kolkata'),
+(2,'rohit',23,'2021-11-05',11000,'mumbai'),
+(3,'subham',21,'2021-11-14',11200,'pune'),
+(5,'sikhar',25,'2021-10-14',45000,'banglore'),
+(6,'suriya',27,'2021-11-16',45600,'delhi');
+
+insert into employee VALUES (8,'mahi',27,'2021-11-16',45600,'delhi'),
+(7,'virat',24,'2021-08-23',45600,'kolkata'),
+(9,'sulu',27,'2021-11-16',74000,'delhi');
+
+--write a query to find the total salary for each age GROUP 
+select * from employee;
+select age as group_age ,sum(salary) as total_salary from employee GROUP BY age;
+
+--find the total order from the order_data for each country
+
+select * from order_data;
+-- command for the answer 
+select country as unique_country , count(*) as total_order from order_data GROUP BY country;
+
+-- write a query to create a aggregate metrics of salary from the employee table 
+select * from employee;
+
+select age as group_age , 
+       sum(salary) as total_salary,
+       max(salary) as maximum_salary,
+       min(salary) as minimum_salary,
+       AVG(salary) as avarage_salary,
+       count(*) as total_no_of_emoloyee
+from employee GROUP BY age; 
+
+---------------------------------------------------------------------------------------------------
