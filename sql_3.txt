@@ -32,3 +32,10 @@ insert into auto_table(name) values('pravat'),('raptee'),('captain');
 select * from auto_table ;
 -- command for using the limit keyword 
 select * from employee LIMIT 3;
+-- command for getting the data in acsending or decsending order 
+-- acsending order 
+select * from employee ORDER BY name ;
+-- decsending order
+select * from employee order by name DESC;
+-- find who is getting the highest salary 
+select name,salary from employee ORDER BY salary desc limit 1;
