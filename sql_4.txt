@@ -113,3 +113,24 @@ insert into student_marks VALUES
 (8,'priya',88);
 
 select * from student_marks;
+/* write a query to calcutate the grade of a student based on the marks following the criteria below
+marks>=90, grade A+
+marks<90 and marks>=85, grade A
+marks<85 and marks>=75, grade B+
+marks<75 and marks>=65, grade B
+marks<65 and marks>=55, grade C+
+marks<55 ,grade D  */
+
+select stu_id,
+       stu_name,
+       stu_marks,
+       case
+           when stu_marks >=90 then 'A+'
+           when stu_marks>=85 and stu_marks<90 then 'A'
+           when stu_marks>=75 and stu_marks<85 then 'B+'
+           when stu_marks>=65 and stu_marks<75 then 'B'
+           when stu_marks>=55 and stu_marks<65 then 'C+'
+           else 'D'
+        end as grade
+from  student_marks;          
+
