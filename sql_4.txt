@@ -95,3 +95,21 @@ select * from supplier_data;
 
 -- write  a query to find the cutomer data where customer and supplier living in the same country
 select * from customer_order_data where cus_country in (select DISTINCT supp_country from supplier_data);
+-------------------------- case when in sql----------------------------------------------------------------
+--creating a new table 
+create table if not exists student_marks
+(
+    stu_id int,
+    stu_name varchar(50),
+    stu_marks int
+);
+insert into student_marks VALUES
+(1,'pravat',86),
+(2,'ram',55),
+(4,'sima',64),
+(3,'rohan',75),
+(6,'ravi',65),
+(5,'rohit',68),
+(8,'priya',88);
+
+select * from student_marks;
