@@ -1,0 +1,97 @@
+-- creating the database 
+create database testdb;
+-- activate the database 
+use testdb;
+-- creating the table with in it 
+create table if not exists order_data
+(
+    customer_id int,
+    order_id int,
+    country varchar(50),
+    state VARCHAR(50)
+);
+-- entering the values in it 
+insert into order_data values(1,100,'USA','seattle'),
+(1,101,'USA','wdc'),
+(2,103,'india','bihar'),
+(2,103,'USA','dfc'),
+(3,104,'india','AP'),
+(5,105,'india','kolkata'),
+(4,107,'UK','london'),
+(6,110,'UK','qwsa'),
+(8,120,'india','mumbai'),
+(7,111,'USA','asda'),
+(9,103,'uk','llll');
+
+select * from order_data;
+
+-- write a query for find the distinct state for each country 
+select country , GROUP_CONCAT(state) as states_for_each_country from order_data group by(country);
+
+--find the all distinct state for each country with the decsending order with the @ separator 
+select country,
+       GROUP_CONCAT(DISTINCT state ORDER BY state DESC SEPARATOR '-') as distinct_states
+from order_data group by(country);  
+
+----------------------------------------------------------------------------------------
+----------------------SUBQUERY----------------------------------------------------------
+-- creating a new table 
+create table if not exists employee
+(
+    id int,
+    name varchar(50),
+    salary DOUBLE
+);
+--inserting the values in it 
+insert into employee VALUES
+(1,'pravat',789000),
+(2,'sumit',45000),
+(3,'raptee',563000),
+(5,'rohit',25100),
+(6,'priya',56320),
+(7,'suriya',458700),
+(11,'rahul',56984),
+(9,'arjun',560000);
+
+select * from employee;
+
+-- write a query to print all those empployee records who gets salary more than sumit
+select * from employee where salary >(select salary from employee where name='sumit');
+
+------------------- IN AND NOT IN------------------------------------------------------
+-- write a query to find the order placed in seallte or goa form the order_data
+
+select * from order_data where state in ('seattle','kolkata') ;
+
+-- creating a new table 
+create table if not exists customer_order_data
+(
+    order_id int,
+    customer_id int,
+    supplier_id int,
+    cus_country varchar(50)
+);
+insert into customer_order_data values
+(100,200,300,'USA'),
+(102,201,305,'india'),
+(103,203,304,'USA'),
+(104,204,308,'uk'),
+(104,210,307,'india'),
+(103,210,333,'USA');
+
+select * from customer_order_data;
+
+-- creating another table 
+create table if not exists supplier_data
+(
+    supp_id int,
+    supp_country varchar(50)
+);
+
+insert into supplier_data VALUES
+(300,'USA'),(307,'india');
+
+select * from supplier_data;
+
+-- write  a query to find the cutomer data where customer and supplier living in the same country
+select * from customer_order_data where cus_country in (select DISTINCT supp_country from supplier_data);
