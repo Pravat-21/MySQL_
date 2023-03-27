@@ -132,5 +132,30 @@ select stu_id,
            when stu_marks>=55 and stu_marks<65 then 'C+'
            else 'D'
         end as grade
-from  student_marks;          
+from  student_marks; 
+-- Q1--
+--TREE QUESTION FROM UBER :(VERY IMPORTANT )
+create table tree 
+(
+    node varchar(10),
+    parent varchar(10)
+);
+insert into tree VALUES
+('5','8'),
+('9','8'),
+('1','5'),
+('4','5'),
+('2','9'),
+('3','9'),
+('8',null);
+
+select * from tree;
+
+select node,
+       CASE
+           when node not in (select distinct parent from tree where parent is not null) then 'leaf'
+           when parent is null then 'root'
+           else 'inner'
+        end as types_of_node
+from tree;           
 
