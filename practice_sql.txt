@@ -1,0 +1,103 @@
+--command for creating the database 
+create database bigdatadb;
+--command for activate the database for USE
+use bigdatadb;
+-- crerating the table in this database 
+create table if not exists customer_id
+(
+    cus_id int,
+    order_id int,
+    supp_id int,
+    cus_country varchar(50)
+);
+--inserting the va;lues in this table :
+insert into customer_id values 
+(1,100,200,'USA'),
+(2,100,202,'INDIA'),
+(4,102,203,'USA'),
+(5,104,205,'INDIA'),
+(6,106,204,'UK'),
+(7,106,206,'UK'),
+(9,104,206,'USA'),
+(11,109,210,'INDIA');
+
+-- showing the table with the inserted data
+select * from customer_id;
+
+-- write a query to find the country where have only 2 order are placed 
+select cus_country from  customer_id GROUP BY cus_country HAVING count(*)=2;
+
+create table if not exists customer_data
+(
+    cus_id int,
+    order_id int,
+    supp_id int,
+    cus_country varchar(50),
+    cus_state varchar(50)
+);
+insert into customer_data values 
+(1,100,200,'USA','seattle'),
+(2,100,202,'INDIA','goa'),
+(4,102,203,'USA','Florida'),
+(5,104,205,'INDIA','AP'),
+(6,106,204,'UK','Manchester'),
+(7,106,206,'UK','Manchester'),
+(9,104,206,'USA','seattle'),
+(11,109,210,'INDIA','goa');
+
+select * from customer_data;
+-- find out the distinct states from the each country 
+select cus_country , GROUP_CONCAT(distinct(cus_state) SEPARATOR '-') as total_distinct_state from customer_data GROUP BY cus_country;
+
+-- create a another table 
+CREATE table if not exists employee
+(
+    id int,
+    name varchar(50),
+    salary DOUBLE,
+    hiring_date DATE
+);
+insert into employee values
+(1,'pravat',780000,'2021-02-12'),
+(3,'rohan',45000,'2021-02-12'),
+(4,'ramesh',56200,'2021-03-16'),
+(6,'pinki',45210,'2022-10-21'),
+(7,'raptee',52000,'2022-02-10'),
+(9,'sourav',78450,'2021-09-30');
+
+select * from employee;
+-- find all the records who are getting the more salary than ramesh
+select * from employee where salary >(select salary from employee where name='ramesh');
+
+-- write a query to print all the order data placed in seattle and goa 
+select * from customer_data where cus_state in ('seattle','goa');
+
+-- given a table of the student's marks 
+create table if not exists student_result
+(
+    stu_id int,
+    name varchar(50),
+    stu_marks int
+);
+insert into student_result values 
+(1,'pravat',60),
+(2,'pinak',96),
+(5,'pamela',50),
+(4,'suriya',64),
+(6,'ram',75),
+(8,'allu',88);
+
+select * from student_result;
+
+--write a query to find the grades based marks 
+select stu_id,
+       name,
+       stu_marks,
+       CASE
+           when stu_marks >=90 then 'A+'
+           when stu_marks >=85 and stu_marks <90 then 'A'
+           when stu_marks >=75 and stu_marks <85 then 'B+'
+           when stu_marks >=60 and stu_marks <75 then 'B'
+           else 'C'
+        end as grade_result
+from student_result;
