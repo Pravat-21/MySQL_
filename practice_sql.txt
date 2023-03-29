@@ -277,3 +277,209 @@ from employees) as tmp
        dense_rank() over(PARTITION BY dept_name order by salary DESC ) as max_sal
 from employees) as tmp
  where max_sal <=2 ; 
+ -----------------------------------29 march (night)-------------------------------------------
+ -- creating the DATABASE
+create database testdb;
+-- creating the table 
+create table if not exists customer
+(
+    id int,
+    name varchar(50)
+);
+
+create table if not exists orders
+(
+    odr_id int,
+    amount double ,
+    cust_id int
+);
+-- inserting the values in customer table 
+insert into customer values
+(1,'pravat'),
+(2,'priya'),
+(4,'rohan'),
+(6,'adi'),
+(5,'hiran'),
+(8,'rohit'),
+(10,'virat'),
+(13,'shami'),
+(15,'nitish');
+
+select * from customer;
+
+insert into orders VALUES
+(100,450,5),
+(102,560,1),
+(106,100,6),
+(105,150,11),
+(105,800,7),
+(104,300,6),
+(102,330,4);
+
+select * from orders;
+--get the order information along with the customer full details if order amount is 
+-- greater than 400 
+select 
+o.*,c.*
+from orders o
+inner join customer c on o.cust_id=c.id and o.amount>400;
+
+----------------------WINDOWS FUNCTION----------------------------------------.
+--creating the table named shop_sales_data
+create table if not exists shop_sales_data
+(
+    sales_date DATE,
+    shop_id varchar(40),
+    sales_amount int
+);
+
+--inserting the values in the table
+insert into shop_sales_data VALUES
+('2021-12-04','s2',230),
+('2021-05-12','s1',800),
+('2021-12-04','s3',450),
+('2021-12-09','s3',500),
+('2021-12-21','s2',650),
+('2021-07-23','s1',420),
+('2021-12-21','s1',120),
+('2021-12-09','s2',230);
+
+select * from shop_sales_data;
+--write a query to find total count of sales for each shop_id 
+select *,
+      count(*) over(PARTITION BY shop_id) as count_sales
+from shop_sales_data;
+
+-- using only order by clause 
+select *,
+       sum(sales_amount) over(order by sales_date DESC) as total_amount
+from shop_sales_data;
+
+-- creating the table amazon_sales_data
+create table if not exists amazon_sales_data
+(
+    sales_date date,
+    sales_amount int
+);
+
+insert into amazon_sales_data values 
+('2021-10-21',450),
+('2021-04-05',550),
+('2021-11-23',400),
+('2021-10-23',600),
+('2021-11-23',200),
+('2021-10-21',100),
+('2021-06-18',300);
+
+select * from amazon_sales_data;
+
+--calculate the datewise rolling average of amazon sales 
+select *,
+       AVG(sales_amount) over (order by sales_date) as avg_sales,
+       SUM(sales_amount) over (order by sales_date) as sum_sales
+from amazon_sales_data;
+
+insert into shop_sales_data VALUES
+('2021-12-04','s2',230),
+('2021-04-04','s3',450),
+('2021-06-06','s1',500),
+('2021-12-04','s1',900),
+('2021-06-18','s2',750),
+('2021-10-23','s1',130),
+('2021-04-05','s2',100),
+('2021-08-26','s3',600);
+
+select * from shop_sales_data;
+-- using the rank function 
+select *,
+       rank()over(PARTITION BY shop_id ORDER BY sales_amount) as rank_shop,
+       ROW_NUMBER()over(PARTITION BY shop_id ORDER BY sales_amount) as rows_shop,
+       DENSE_RANK()over(PARTITION BY shop_id ORDER BY sales_amount) as densed_rank_shop
+from shop_sales_data;
+
+-- creating the table named employee
+create table if not exists employee
+(
+    emp_id int,
+    salary double,
+    dept_name varchar(50)
+);
+--inserting the values into the table
+insert into employee values 
+(1,5000,'finance'),
+(3,6000,'it'),
+(1,15000,'finance'),
+(1,12000,'software'),
+(1,6500,'software'),
+(1,3000,'finance'),
+(1,9000,'it');
+
+select * from employee;
+
+--get one employee from each department who is getting the maximum salary 
+select * 
+from (SELECT *,
+       DENSE_RANK()over(PARTITION BY dept_name order by salary DESC) as densed_rank
+from employee) as tmp where densed_rank=1;
+
+select * 
+from (SELECT *,
+       ROW_NUMBER()over(PARTITION BY dept_name order by salary DESC) as row_rank
+from employee) as tmp where row_rank=1;
+
+insert into employee values 
+(4,15000,'finance'),
+(9,15000,'finance'),
+(4,13000,'finance'),
+(4,12000,'software'),
+(4,9000,'it'),
+(4,15000,'finance'),
+(4,9000,'it'),
+(4,14000,'finance');
+
+select* from 
+(select *,
+       DENSE_RANK()over(partition by dept_name order by salary ) as dense_salary
+from employee)  tmp where dense_salary <=2;
+
+------------------------lag()-- lead()----------------------------
+-- creating the table daily_sales
+create table if not exists daily_sales
+(
+    sales_date DATE,
+    sales_amount double
+);
+
+insert into daily_sales VALUES
+('2021-05-29',500),
+('2021-08-17',450),
+('2021-11-06',300),
+('2021-08-17',700),
+('2021-05-29',550),
+('2021-05-29',450),
+('2021-10-29',600),
+('2021-11-06',200);
+
+select * from daily_sales;
+
+select *,
+       lag(sales_amount,2,0)over(order by sales_date ) as lag_values
+from daily_sales;
+
+-- calcualte the differrance of sales with previous day sales 
+select *,
+    lag(sales_amount,1,0)over(order by sales_date) as lag_1_values,
+    sales_amount-lag(sales_amount,1,0)over(order by sales_date) as diff_values
+from daily_sales;
+
+------------------------ Frame clause----------------------------------------
+-------ROW BETWEEN-----------------------
+select * from daily_sales;
+select *,
+       sum(sales_amount) over(order by sales_date rows BETWEEN 1 PRECEDING and current row) as sum_values
+from daily_sales;
+
+-------RANGE BETWEEN-------------------
+SELECT *,
+      sum(sales_amount)over(order by sales_amount range BETWEEN 100 PRECEDING and 200 FOLLOWING) as range_sum
+from daily_sales;
